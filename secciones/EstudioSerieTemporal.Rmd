@@ -1,18 +1,18 @@
 ---
 title: "Estudio sobre infectados de coronavirus"
 author: "Ricardo Alberich, Juan Gabriel Gomila y Arnau Mir"
-date: ''
+date: "2022-08-31"
 output: 
   ioslides_presentation:
     widescreen: true
-    css: Mery_style.css
+    css: css/Mery_style.css
     fig_caption: yes
 ---
 <script src="https://kit.fontawesome.com/a0edb659c7.js" crossorigin="anonymous"></script>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-reticulate::use_python("/Users/juangabriel/anaconda3/bin/python")
+reticulate::use_python("C:/Users/mudar/anaconda3/envs/covid19")
 #reticulate::py_install("sympy")
 ```
 
@@ -36,8 +36,8 @@ Para realizar el estudio anterior, usaremos la tabla de datos `covid19`.
 
 Vamos a cargarla:
 ```{r}
-covid19=read.csv("covid_19_clean_complete.csv")
-covid19$Date=as.Date(as.character(covid19$Date),"%m/%d/%Y")
+covid19=read.csv("../data/covid_19_clean_complete.csv")
+covid19$Date=as.Date(as.character(covid19$Date),"%Y-%m-%d")
 ```
 
 ## Tabla de datos
@@ -67,30 +67,30 @@ Vamos a calcular el valor $R_0$ para los datos que tenemos referidos a España.
 
 Para ello, en primer lugar, creamos la tabla con los datos del coronavirus sólo para España:
 ```{r}
-covid19.España = covid19[covid19$Country.Region=="Spain",]
+covid19.Spain = covid19[covid19$Country.Region=="Spain",]
 ```
 
 A continuación calculamos los infectados y los recuperados por días:
 ```{r}
-infectados.por.dia = aggregate(covid19.España$Confirmed ~ covid19.España$Date,FUN=sum)
-fallecidos.por.dia = aggregate(covid19.España$Deaths ~ covid19.España$Date,FUN=sum)
-recuperados.por.dia = aggregate(covid19.España$Recovered ~ covid19.España$Date,FUN=sum)
+infectados.por.dia = aggregate(covid19.Spain$Confirmed ~ covid19.Spain$Date,FUN=sum)
+fallecidos.por.dia = aggregate(covid19.Spain$Deaths ~ covid19.Spain$Date,FUN=sum)
+recuperados.por.dia = aggregate(covid19.Spain$Recovered ~ covid19.Spain$Date,FUN=sum)
 ```
 
 ## Tabla de datos para España
 
-Por último creamos la tabla `tabla.España` con toda la información:
+Por último creamos la tabla `tabla.Spain` con toda la información:
 ```{r}
-tabla.España = data.frame(unique(covid19.España$Date),infectados.por.dia[,2],
+tabla.Spain = data.frame(unique(covid19.Spain$Date),infectados.por.dia[,2],
                           fallecidos.por.dia[,2],recuperados.por.dia[,2])
-names(tabla.España) = c("Fecha", "Infectados","Fallecidos", "Recuperados")
+names(tabla.Spain) = c("Fecha", "Infectados","Fallecidos", "Recuperados")
 ```
 
 
 ## Tabla de datos para España
 La información de los 10 primeros días será donde vemos que aún no hay ningún infectado ni recuperado:
 ```{r}
-head(tabla.España,10)
+head(tabla.Spain,10)
 ```
 
 
@@ -99,7 +99,7 @@ head(tabla.España,10)
 ## Cálculo de la serie temporal de infectados
 Vamos a de modelar el número de infectados como una serie temporal:
 ```{r}
-infectados = ts(tabla.España$Infectados,frequency = 7,start=c(1,3))
+infectados = ts(tabla.Spain$Infectados,frequency = 7,start=c(1,3))
 infectados
 ```
 
@@ -221,7 +221,7 @@ plot(predicción.infectados)
 ## Predicciones usando el suavizado exponencial
 Para hacer predicciones más allá del último día de nuestra tabla de datos hemos de usar la función `forecast.HoltWinters` del paquete `forecast` donde el parámetro `h` indica hasta dónde queremos realizar la predicción:
 ```{r,message=FALSE}
-library(forecast)
+library(forecast) # versión 8.16
 (predicción.infectados.semana = forecast:::forecast.HoltWinters(predicción.infectados, 
                                                                 h=7))
 ```
@@ -275,7 +275,7 @@ Vemos que el modelo no sería adecuado ya que el test anterior nos dice que los 
 ## Serie temporal de los fallecidos
 Hagamos lo mismo para la serie temporal de los fallecidos:
 ```{r}
-fallecidos = ts(tabla.España$Fallecidos,frequency = 7,start=c(1,3))
+fallecidos = ts(tabla.Spain$Fallecidos,frequency = 7,start=c(1,3))
 plot.ts(fallecidos)
 ```
 

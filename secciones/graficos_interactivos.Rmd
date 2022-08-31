@@ -1,6 +1,6 @@
 ---
 title: 'Fuentes: Datos oficiales COVID-19 España'
-author: "Jesus Mudarra Luján"
+author: "Ricardo Alberich, Juan Gabriel Gomila y Arnau Mir"
 date: "2022-08-28"
 output: html_document
 ---

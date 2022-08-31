@@ -1,6 +1,6 @@
 ---
 title: "Análisis COVID-19"
-author: "Jesus Mudarra Luján"
+author: "Ricardo Alberich, Juan Gabriel Gomila y Arnau Mir"
 date: '2022-08-22'
 output: html_document
 ---
@@ -30,7 +30,7 @@ Los datos que se van a analizar en este documento proceden de la compilación he
 
 ```{python}
 import pandas as pd
-datos = pd.read_csv("data/covid_19_clean_complete.csv")
+datos = pd.read_csv("../data/covid_19_clean_complete.csv")
 datos.head(10)
 ```
 
@@ -38,14 +38,14 @@ datos.head(10)
 
 ```{r}
 pd <- import("pandas")
-datos <- pd$read_csv("data/covid_19_clean_complete.csv")
+datos <- pd$read_csv("../data/covid_19_clean_complete.csv")
 kable(head(datos, 10))
 ```
 
 ### Carga del dataset desde R
 
 ```{r}
-datos <- read.csv("data/covid_19_clean_complete.csv", stringsAsFactors = T)
+datos <- read.csv("../data/covid_19_clean_complete.csv", stringsAsFactors = T)
 datos %>% head(10) %>% kable()
 ```
 
